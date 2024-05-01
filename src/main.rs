@@ -23,7 +23,15 @@ fn main() {
                 
                 let mut buffer = [0; 1024];
                 stream.read(&mut buffer).unwrap();
-                stream.write(b"+PONG\r\n").unwrap();
+                
+                loop {
+                    let read_count = stream.read(&mut buffer).unwrap();
+                    if read_count == 0 {
+                        break;
+                    }
+                    
+                    stream.write(b"+PONG\r\n").unwrap();
+                }
             }
             Err(e) => {
                 println!("error: {}", e);
